@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>「发掘你的属灵恩赐」问卷</title>
+  <style>
+    :root {
+      --primary: #0066cc;
+      --primary-dark: #004080;
+      --light: #f8f9fa;
+      --gray: #6c757d;
+      --success: #28a745;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--light);
+      color: #333;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    main {
+      flex: 1;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    h1, h2 {
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
+    }
+
+    .intro p {
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+    }
+
+    label {
+      display: block;
+      margin: 0.6rem 0;
+      font-size: 1.05rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.7rem;
+      font-size: 1.1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      margin: 1.5rem 0;
+    }
+
+    .options label {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.9rem;
+      background: #f0f4f8;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .options input[type="radio"] {
+      width: 1.3rem;
+      height: 1.3rem;
+    }
+
+    .options label:hover {
+      background: #e3f2fd;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.8rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 0.8rem 1.6rem;
+      font-size: 1.05rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    .progress-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid #ddd;
+      padding: 0.8rem 1rem;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.08);
+    }
+
+    progress {
+      width: 100%;
+      height: 10px;
+      border-radius: 5px;
+    }
+
+    progress::-webkit-progress-value {
+      background: var(--success);
+      border-radius: 5px;
+    }
+
+    progress::-moz-progress-bar {
+      background: var(--success);
+      border-radius: 5px;
+    }
+
+    .report {
+      white-space: pre-wrap;
+      font-size: 1.05rem;
+    }
+
+    .report .gift-desc {
+      white-space: normal;
+      margin: 0.4em 0 0.8em 0;
+      padding-left: 2.8em;
+      text-indent: -1.2em;
+      line-height: 1.45;
+    }
+
+    .report .toggle-descriptions,
+    .report .toggle-scores {
+      margin-left: 1.2em;
+      font-size: 0.95rem;
+      padding: 0.4em 0.9em;
+      cursor: pointer;
+      background: #e9ecef;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      color: #495057;
+    }
+
+    .report .toggle-descriptions:hover,
+    .report .toggle-scores:hover {
+      background: #dee2e6;
+    }
+
+    .report.hide-descriptions .gift-desc {
+      display: none;
+    }
+
+    .report.hide-scores .score-value {
+      display: none;
+    }
+
+    /* ────────────────────────────────────────────────
+       Final action buttons – improved centering & shorter height
+    ──────────────────────────────────────────────── */
+
+    .final-actions {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .final-actions > p:first-child {
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 0.6rem;
+      font-size: 1.1rem;
+    }
+
+    .final-actions button,
+    .final-actions a.btn-primary {
+      display: block;
+      width: 100%;
+      padding: 0.55rem 1.2rem !important;
+      font-size: 1.03rem;
+      font-weight: 500;
+      line-height: 1.2;
+      text-align: center;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-sizing: border-box;
+      text-decoration: none;
+      background: var(--primary);
+      color: white;
+      white-space: normal;
+    }
+
+    .final-actions button:hover,
+    .final-actions button:focus,
+    .final-actions a.btn-primary:hover,
+    .final-actions a.btn-primary:focus {
+      background: var(--primary-dark);
+    }
+
+    .final-actions .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .final-actions .btn-secondary:hover,
+    .final-actions .btn-secondary:focus {
+      background: #5a6268;
+    }
+
+    .final-actions p:last-of-type {
+      margin: 0.8rem 0 0 0;
+      font-size: 0.95rem;
+      color: #555;
+      text-align: center;
+    }
+
+    @media (max-width: 400px) {
+      .btn-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.8rem;
+      }
+
+      .btn-container > div {
+        flex: 1 1 auto;
+      }
+
+      .btn-container button {
+        min-width: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>「发掘你的属灵恩赐」问卷</header>
+
+  <main id="app">
+    <!-- Content dynamically inserted here -->
+  </main>
+
+  <div class="progress-container">
+    <progress id="progress" value="0" max="100"></progress>
+  </div>
+
+  <script>
+    // ────────────────────────────────────────────────
+    //  CONFIGURATION — Replace these parts
+    // ────────────────────────────────────────────────
+
+    const STORAGE_KEY = "survey-progress-2026";
+
+    const questions = [
+"1. 我喜欢在幕后处理细节琐事。",
+        "2. 当群体中没有领导者的时候，我常会自告奋勇去担真领导的工作。",
+        "3. 处身于群体中，我总主动去接触那些孤单的人。",
+        "4. 我有能力找出需要，也会完成它相应的工作，无论这工作是如何的微不足道。",
+        "5. 我能够把意见、人和事组织起来，以达至某订定的目标。",
+        "6. 人们常说我有良好的属灵分析能力。",
+        "7. 我极相信自己能作大事以荣耀神的名字。",
+        "8. 我曾被邀请在教会活动中歌唱或奏乐。",
+        "9. 神曾因应我的祷告成就不可能发生的事情。",
+        "10. 我能靠双手创作，能设计及制作物品。",
+        "11. 因我的祷告，神曾让我在没可能的情况下得到超自然的果效。",
+        "12. 我乐意以钱财供应有急切需要的人。",
+        "13. 我乐意安慰身在医院、监狱或老人院的人们。",
+        "14. 我经常能洞察问题的所在并提供适切的解决方法。",
+        "15. 我曾洞悉教会所面对的困难；而且人们毫无头绪时，我已有解决的办法。",
+        "16. 我喜欢鼓励、慰解沮丧的人。",
+        "17. 我能够详尽深入地查考某段经文，然后与别人分享该经文的意思。",
+        "18. 我正在带领着一个（或一个以上）年青基督徒在他的属灵路上成长。",
+        "19. 我得到别人的尊敬，认为我在属灵的事上有着权柄。",
+        "20. 我有学习外语的能力。",
+        "21. 神常向我启迪祂对教会未来动向的旨意。",
+        "22. 我喜欢与非基督徒相处，特别希望借此与他们分享主耶稣的讯息。",
+        "23. 每当我从新闻或谈话中知道某些特别的需要时，我都有代祷的感动。",
+        "24. 我愿意协助牧教会领袖，以致他们更有时间去处理优先的或更重要的事工。",
+        "25. 我不怕要求别人为教会完成一项重要的事工。",
+        "26. 我喜欢招待客人，让他们觉得宾至如归。",
+        "27. 我喜欢服事别人，不管所作的事是如何微不足道。",
+        "28. 我具极强的组织能力，常常订定目标​​及制定方案去完成它。",
+        "29. 我擅于分办别人的品格，且能找出属灵上的错谬。",
+        "30. 我常敢开拓一些别人不敢尝试的计划，而且经常获致成功。",
+        "31. 我相信我是一个好的诗班员。",
+        "32. 神曾使用我作出一些人类能力范围内不能达致的事情。",
+        "33. 我喜欢做一些例如木工、编织、缝纫、五金、彩色玻璃等的工作。",
+        "34. 我喜欢为一些身体或情绪上有病患的祷告，祈求神医治他们。",
+        "35. 我喜乐地奉献远超过我收入的十分之一。",
+        "36. 我同情受伤害或孤单的人，并愿意花时间陪伴他们，使他们开心。",
+        "37. 神曾经在某重要的事情上，带领我在数个复杂的选择中作出正确的决定，那时候，没有人知道应该怎样做。",
+        "38. 我喜欢研究有关神话语中的疑难问题，并能比他人更快捷及更容易地找到答案。",
+        "39. 人们经常向我倾诉他们的困难，我亦会鼓励他们。",
+        "40. 当遇上难解经文时，我往往有强烈兴趣要去探究答案。",
+        "41. 我愿意牺牲自己的空闲时间去帮助有需要的人。",
+        "42. 我愿意并雀跃地去开拓一间新的教会。",
+        "43. 我容易地适应外地的文化、语言及生活习惯。因着我的适应力，我愿意在别的国家事奉。",
+        "44. 我经常为基督教的要义发言，尽管我说的话并不为众人所欢迎，一些人更认为我思想狭窄或顽固。",
+        "45. 我很容易带领人接受基督。",
+        "46. 我认为一个基督徒最重要的事就是祷告。",
+        "47. 我愿意替代别人的常务工作，好让他们能完成他们的特定任务。",
+        "48. 我能够组织及带领一个群体去达成一个特定的目标。",
+        "49. 我喜欢结识新来的朋友及介绍他们认识群体里其他的人。",
+        "50. 我经常于限定的时间内把事情做好，并不大需要别人的称赞及感谢。",
+        "51. 我可以轻松地把重要的责任授权以他人。",
+        "52. 在复杂的属灵问题上，他人尚在迷惘中，我却能分办其中的对错。",
+        "53. 虽然外在环境恶劣，因着神的信实，我深信我的未来是一片光明。",
+        "54. 我喜爱唱歌，人们亦说我有一副好嗓子。",
+        "55. 神曾因着我的祷告，让我在不可能的境况下得着超自然的果效。",
+        "56. 我在供应别人的需要中得着喜乐。",
+        "57. 曾有人因我的祷告而得医治。",
+        "58. 我不介意降低自己的生活条件，以至能更多的供应教会及有需要的人。",
+        "59. 就算要作出一些牺牲，我也愿意尽我的能力帮助身边有需要的人。",
+        "60. 当人们不知道该怎样做的时候，他们通常会来征询我的意见。",
+        "61. 我能够从众多道寻找资讯，以得出对问题的答案，或在某课题上得到更多的学习。",
+        "62. 我有催逼感要自己挑战（但非注责）别人，着他们特别在灵命方面有所增长。",
+        "63. 人们喜爱聆听我的圣经教导。",
+        "64. 我喜欢与人同工，并希望协助他人成为为主作工的最佳的人选。",
+        "65. 别处很多地方的人也接受我的属灵权柄。",
+        "66. 我愿意在与自己文化及生活方式不同的国家，以外语传讲福音。",
+        "67. 我觉得必要传讲圣经的讯息，使人们明白神对他们的期望。",
+        "68. 我喜欢告诉别人如何能成为基督徒，以及邀请他们接受基督。",
+        "69. 神应允了众多我为别人的代求。",
+        "70. 我乐意帮助别人完成工作，并不需要公开的表彰。",
+        "71. 人们敬重我的意见并跟随我的方向。",
+        "72. 我乐意开放自己的家与教会的新朋友或访客交往。",
+        "73. 我喜爱帮助有需要的人；当满足他们的需要时，我感到满足。",
+        "74. 那怕在压力下，我也可轻松地作出重要的决定。",
+        "75. 人们常来向我请教如何判断属灵上的真理与错谬。",
+        "76. 我常透过祷告向神表达信心，神亦以令人振奋的方式回应我的祷告。",
+        "77. 我相信神会透过在诗班的事奉，​​叫我以歌曲传递祂的讯息。",
+        "78. 神透过使用我作出神迹以荣耀祂的国。",
+        "79. 人们说我有手艺的天份。",
+        "80. 人们常找我为他们身体的医治代祷。",
+        "81. 我常用不具名的方式，以金钱帮助别人，从不期望任何的回报。",
+        "82. 当我知道别人因没有工作而不能应付生活所需的时候，我总会尽力帮助他们。",
+        "83. 神使我能把圣经真理应用于实际的境况上。",
+        "84. 我能自学探讨深奥的圣经真理和原则，我也享受这过程。",
+        "85. 人们说我容易相处，他们会把他们的秘密告诉我。",
+        "86. 我能组织我的思考，并且能有条理地把准备好的圣经课题在人们前表达出来。",
+        "87. 我帮助偏离神的基督徒们与神重新建立良好的关系。",
+        "88. 在缺乏教会的地方传福音以至建立新的基督徒群体是一件令我兴奋的事。",
+        "89. 我没有种族歧视，我真诚地欣赏与我极不相同的人。",
+        "90. 我觉得我没有困难把圣经的应许运用于现今的境况中。",
+        "91. 我强烈希望帮助非基督徒得着主耶稣的救恩。",
+        "92. 我最喜爱的教会事工是祷告，为此我把大量的时问摆上。"
+    ].slice(0, 92); // enforce exactly 92
+    
+    Object.freeze(questions);
+    
+    const spiritualGifts = [
+      {
+        name: "帮助人",
+        description: "能把自己的才干投资于其他会友的生命和事奉中，让这些被帮助的人更有效地运用他们的属灵思赐（可 15:40-41：徒 9:36；罗"+
+        " 16:1-2；林前 12:28）。"
+      },
+      {
+        name: "领导",
+        description: "能按着神的旨意定出目标，并使别人能接受这些目标，务求令他们能自愿与和睦地，为了神的荣耀，共同达致这些目标（徒 15:7"+
+        "-11；罗 12:8；提前 5:17；来13:7-17）。"
+      },
+      {
+        name: "款待",
+        description: "能开放自己的家庭，并欢迎那些需要食物和住宿的人（徒16:14-15；罗12:9-13,16:23；来13:1-2；彼前 4:9）。"
+      },
+      {
+        name: "服事",
+        description: "能在神的事工中找出还未满足的需要，在可运用的资源下，使这些需要得着满足，并帮助达成事工的目标（徒6:1-7；罗12:7；加"+
+        "6:2；提后1:16-18；多 3:14）。"
+      },
+      {
+        name: "行政",
+        description: "能清楚明白基督身体中某单元的短期及长远目标，并为这些目标设计及执行有效的计划（路14:28-30；徒6:1-7；林前12:28）。"
+      },
+      {
+        name: "属灵洞察力",
+        description: "能确实地知道，那些似乎是由神而来的行为，到底是属神的、属人的、或是属撤但的。这恩赐的作用是防止混乱及假的教导渗入教"+
+        "会（太16:21-23；徒5:1-11,16:16-18；林前 12:10；约一4:1-6）。"
+      },
+      {
+        name: "信心",
+        description: "能以非凡的信心去分办神的旨意和目的，及驱动信仰群体去积极地获致神的应许（徒11:22-23；罗4:18:21；林前12:9；来11）。"
+      },
+      {
+        name: "音乐",
+        description: "能用音乐（歌声或乐器）敬拜神及裨益他人（申31:22；撒上16:16；代上16:41-42；代下 5:12-13,34:12；诗150）。"
+      },
+      {
+        name: "神迹",
+        description: "能成为人类的一个媒介，让神透过他们成就大有能力的事迹；对观察者而言，那根本就是改变了自然界的正常程序（徒9:36-42,1"+
+        "9:11-20；20:7-12；罗15:18-19；林前 12:10,28）。"
+      },
+      {
+        name: "手艺",
+        description: "能以手、思想及脑袋，透过艺术的创作去促进神的国。拥有这恩赐的人亦可带领他人在这范畴中发展他们的能力。这恩赐亦可用于"+
+        "维修、照料、保养、美化神在地上的国度（出30:22-25, 31:3-11；代下34:9-13：徒18:2-3）。"
+      },
+      {
+        name: "医治",
+        description: "能成为人类的一个媒介，让神透过他们去医治他人的身体或情绪上的疾病（徒3:1-10,5:12-16,9:32-35,28:7-10；林前 12:"+
+        "9,28）。"
+      },
+      {
+        name: "奉献",
+        description: "能够慷慨和喜乐地把自己物质的资源奉献于神的事工（可12:41-44；罗12:8；林后 8:1-7,9:2-8）。"
+      },
+      {
+        name: "怜悯",
+        description: "能对生理、心理或情绪上有痛苦的人感同身受和同情；且能把这些感受转化成使人愉悦的行为，从中表达出基督的爱，和减轻他们"+
+        "的痛苦（太9:34,36；可9:41；帖前 5:14）。"
+      },
+      {
+        name: "智慧",
+        description: "能把属灵的真理合适地应用于生活上，并能在困境中按情况作出正确的决择（徒6:3,10；林前 2:1-13,12:8； 雅1:5；彼后 3"+
+        ":15）。"
+      },
+      {
+        name: "知识",
+        description: "能发现、收集、分析、和澄清与教会增长和福祉有关的资料及观念（徒5:1-11；林前 12:8； 林后 11:8；西2:2-3）。"
+      },
+      {
+        name: "劝勉",
+        description: "能引用神用的话语，使人得鼓励、安慰舒畅，和激励、帮助他们完成任务及得著成长（徒4:32-37，14:22；罗 12:8；提前 4:1"+
+        "3；来 10:24-25）。"
+      },
+      {
+        name: "教导",
+        description: "能合逻辑地、有系统地研读圣经，并能清楚讲解真理，让信徒获得造就及装备（徒18:24-28,20:20-21；林前 12:28；弗4:11-14）。"
+      },
+      {
+        name: "牧养",
+        description: "能为了信众的属灵利益，肩负起长期的个人责任（约10:1-18；弗4:11-14；提前 3:1-7；彼前 5:1-3）。"
+      },
+      {
+        name: "使徒",
+        description: "能领导某一个数目的教会，并在属灵的事工上拥有特别的权柄，而又自然地被这些教会接纳和赏识（徒15:1-2；林前12:18；林后"+
+        " 12:12：加1:7-10；弗3:1-9，4:11-14）。"
+      },
+      {
+        name: "宣教",
+        description: "能在异国文化中，运用他们各个属灵恩赐去事奉（徒 8:4,13:1-3,22:21；罗10:15；林前9:19-23）。"
+      },
+      {
+        name: "作先知讲道",
+        description: "能被神膏抹以宣讲祂的讯息，使听者深信该讯息是神的话语，并认为他们必须有所回应（徒2:37-40,7:54,26:24-29；林前 14"+
+        ":1,3；帖前1:5）。"
+      },
+      {
+        name: "传福音",
+        description: "能适当地与非信徒分享福音，带领他们成为耶稣的门徒，并成为教会中有责任感的会友（徒5:5-6,26-40,14:21,21:8；弗4:11"+
+        "-14；提后4:5）。"
+      },
+      {
+        name: "祷告",
+        description: "比较一般的信徒，能更经常更长时间地祷告，而且更得着频密适切的回应（路22:41-44；徒12:12；西1:9-12,4:12-13；提前2"+
+        ":1-2；雅5:14-16）。"
+      }
+    ];
+
+    // Optional – prevent accidental modification
+    Object.freeze(spiritualGifts);
+
+    // This function receives an array of 92 numbers (0–4 or null/undefined if unanswered)
+    // You MUST replace this function with your real scoring logic
+    function generateReport2(answers) {
+       // Real Report here
+      const topThreeResult = topThree(calculateReport(answers));
+      report = "";
+      for (let i = 0; i<topThreeResult.length; i++) {
+        report += "index:" + topThreeResult[i].index + ",";
+        report += "score:" + topThreeResult[i].score + ";";
+      }
+      return report;    
+    }
+    
+    function generatePlainTextReport(answers) {
+      const result = calculateReport(answers);
+      const top = topThree(result);
+
+      let text = `${state.name || "参与者"} 的属灵恩赐报告\n`;
+      text += "==============================\n\n";
+      text += "主要属灵恩赐（按分数高低排序，包括与第三位并列者）：\n\n";
+
+      top.forEach((item, rank) => {
+        const position = rank === 0 ? "第一" :
+                         rank === 1 ? "第二" :
+                         rank === 2 ? "第三" : `${rank + 1}（并列）`;
+        const name = spiritualGifts[item.index].name;
+        const desc = spiritualGifts[item.index].description;
+        text += `${position}：${name}（分數：${item.score} / 16）\n`;
+        text += `${desc}\n\n`;
+      });
+
+      text += "==============================\n";
+      text += "所有类别完整分数：\n\n";
+
+      result.forEach((score, i) => {
+        text += `類別 ${i + 1}（${spiritualGifts[i].name}）：${score} / 16\n`;
+        text += `${spiritualGifts[i].description}\n\n`;
+      });
+
+      text += "(每项类别最高可能分数为 16 分)\n";
+      return text;
+    }
+
+    function generateReport(answers) {
+      const result = calculateReport(answers);
+      const top = topThree(result);
+
+      let report = "\n";
+      report += "您的主要属灵恩赐（按分数高低排序，包括与第三位并列者）：\n\n";
+
+      top.forEach((item, rank) => {
+        const position = rank === 0 ? "第一" :
+                         rank === 1 ? "第二" :
+                         rank === 2 ? "第三" : `${rank + 1}（并列）`;
+
+        const name = spiritualGifts[item.index].name;
+        const desc = spiritualGifts[item.index].description;
+
+        report += `<b>${position}：${name}</b> `;
+        report += `<span class="score-value">（分数：${item.score} / 16）</span><br>`;
+        report += `<div class="gift-desc">${desc}</div>`;
+      });
+
+      report += `<BR><button class="toggle-descriptions" onclick="toggleDescriptions()">隐藏描述</button><br><br>`;
+      report += `<button class="toggle-scores" onclick="toggleScores()">隐藏分数</button><br><br>`;
+
+      report += "<H2>所有类别完整分数：</H2>"; 
+      report += `<div id="full-scores-list">`;
+      result.forEach((score, i) => {
+        report += `<b>类别 ${i + 1}（${spiritualGifts[i].name}）：</b> `;
+        report += `<span class="score-value">${score}</span><br>`;
+        report += `<div class="gift-desc">${spiritualGifts[i].description}</div>`;
+      });
+
+      report += `<p style="font-size:0.95rem; color:#555;">(每项类别最高可能分数为 16 分)</p><br>`;
+
+      return report;
+    }
+    
+    /**
+     * Returns all items that belong to the top 3 scores or better,
+     * including any additional items that tie with the third-highest score.
+     * Results are ordered from highest to lowest score.
+     * Within the same score, lower indices come first.
+     *
+     * @param {number[]} result - Array of 23 numbers (group sums)
+     * @returns {Array<{index: number, score: number}>}
+     *          Array of objects (may contain 3 or more items)
+     */
+    function topThree(result) {
+      // Create array of {score, index} pairs
+      const indexed = result.map((score, index) => ({ score, index }));
+
+      // Sort: descending by score, then ascending by index on ties
+      indexed.sort((a, b) => {
+        if (b.score !== a.score) {
+          return b.score - a.score;     // higher score first
+        }
+        return a.index - b.index;       // stable: smaller index first
+      });
+
+      // If fewer than 3 items exist (very rare), return all
+      if (indexed.length < 3) {
+        return indexed.map(item => ({ index: item.index, score: item.score }));
+      }
+
+      // Find the score of the third position
+      const thirdScore = indexed[2].score;
+
+      // Include all items whose score >= thirdScore
+      const topItems = indexed.filter(item => item.score >= thirdScore);
+
+      // Return only the relevant properties
+      return topItems.map(item => ({
+        index: item.index,
+        score: item.score
+      }));
+    }
+    
+    function calculateReport(answers) {
+      const result = new Array(23).fill(0);
+
+      for (let i = 0; i < 23; i++) {
+        // Question positions (1-based): base, base+23, base+46, base+69
+        // Convert to 0-based array indices
+        const q1 = i;           // 0 .. 22
+        const q2 = i + 23;      // 23 .. 45
+        const q3 = i + 46;      // 46 .. 68
+        const q4 = i + 69;      // 69 .. 91
+
+        // Safely get values (missing or invalid → treat as 0)
+        const v1 = Number(answers[q1]) || 0;
+        const v2 = Number(answers[q2]) || 0;
+        const v3 = Number(answers[q3]) || 0;
+        const v4 = Number(answers[q4]) || 0;
+
+        // Sum and store (result[0] = group 1, result[1] = group 2, ..., result[22] = group 23)
+        result[i] = v1 + v2 + v3 + v4;
+    }
+
+      return result;
+    }
+
+    // ────────────────────────────────────────────────
+    //  STATE & CORE LOGIC (do NOT modify unless necessary)
+    // ────────────────────────────────────────────────
+
+    let state = {
+      name: "",
+      current: 0,           // 0 = welcome, 1–92 = questions, 93 = report
+      answers: new Array(92).fill(null),
+      ...loadProgress()
+    };
+
+    function loadProgress() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return {};
+        const data = JSON.parse(saved);
+        // Basic validation
+        if (typeof data.current === "number" && Array.isArray(data.answers)) {
+          return {
+            name: data.name || "",
+            current: Math.max(0, Math.min(93, data.current)),
+            answers: data.answers.map(v => (Number.isInteger(v) && v >= 0 && v <= 4) ? v : null)
+          };
+        }
+      } catch (e) {}
+      return {};
+    }
+
+    function saveProgress() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          name: state.name,
+          current: state.current,
+          answers: state.answers
+        }));
+      } catch (e) {
+        console.warn("localStorage save failed", e);
+      }
+    }
+
+    function updateProgressBar() {
+      const answered = state.answers.filter(v => v !== null).length;
+      const pct = state.current >= 93 ? 100 : (answered / 92) * 100;
+      document.getElementById("progress").value = pct;
+    }
+
+    function render() {
+      const app = document.getElementById("app");
+      let html = "";
+
+      if (state.current === 0) {
+        // Welcome screen
+        html = `
+          <div class="card intro">
+            <h1>Welcome</h1>
+            <p>请根据你的生活实况选择每个问题。回答问题时毋须仔细思考，按你的自然反应作答则可。</p>
+            <p>To begin, please enter your first name (optional):</p>
+            <input type="text" id="nameInput" placeholder="Your first name" value="${state.name}" />
+            <div class="btn-container">
+              <button class="btn-primary" onclick="startSurvey()">Start Survey</button>
+            </div>
+          </div>
+        `;
+      } else if (state.current >= 1 && state.current <= 92) {
+        // Question screen
+        const qIndex = state.current - 1;
+        const qText = questions[qIndex] || `Question ${state.current}`;
+        const selected = state.answers[qIndex];
+
+        html = `
+          <div class="card">
+            <h2>${state.name || "User"}, question ${state.current} of 92</h2>
+            <p style="font-size:1.1rem; margin-bottom:1.5rem;">${qText}</p>
+
+            <div class="options">
+              ${[0,1,2,3,4].map(val => `
+                <label>
+                  <input type="radio" name="q${qIndex}" value="${val}"
+                    ${selected === val ? "checked" : ""}
+                    onchange="selectAnswer(${qIndex}, ${val})" />
+                  <!--${val} — ${val === 0 ? "Strongly Disagree" : val === 4 ? "Strongly Agree" : ""}-->
+                  ${answerSelections(val)}
+                </label>
+              `).join("")}
+            </div>
+
+            <div class="btn-container" style="display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+              <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                  ${state.current > 1 ? `
+                    <button class="btn-secondary" onclick="goBack()">Back</button>
+                    ` : ""}
+                  <button class="btn-primary" onclick="goNext()" ${selected === null ? "disabled" : ""}>
+                    Next
+                  </button>
+                  </div>
+
+                  <button class="btn-secondary" onclick="confirmReset()">
+                    Reset
+                  </button>
+                </div>
+          </div>
+        `;
+      } else if (state.current === 93) {
+        // Report screen
+        const reportText = generateReport(state.answers);
+
+        html = `
+          <div class="card">
+            <h1>Your report, ${state.name}</h1>
+            <div class="report" style="font-size:1.05rem; white-space:pre-wrap;">
+              ${reportText}
+            </div>
+
+            <div class="final-actions">
+              <p>Next Step:</p>
+
+              <button class="btn-primary" onclick="window.print()">Print / Save as PDF</button>
+
+              <a href="mailto:?subject=${state.name} 的属灵恩赐报告&body=${encodeURIComponent(generatePlainTextReport(state.answers))}"
+                 class="btn-primary">Email Results (includes all information)</a>
+
+              <p>Tip: Take a screenshot for your records.</p>
+
+              <button class="btn-secondary" onclick="confirmReset()">Reset</button>
+            </div>
+          </div>
+        `;
+      }
+
+      app.innerHTML = html;
+      updateProgressBar();
+    }
+
+    // ────────────────────────────────────────────────
+    //  EVENT HANDLERS
+    // ────────────────────────────────────────────────
+
+    function answerSelections(value) {
+        if (value == 0)
+            return "否定";
+        if (value == 1)
+            return "少许赞同";
+        if (value == 2)
+            return "大致赞同";
+        if (value == 3)
+            return "相当赞同";
+        if (value == 4)
+            return "非常赞同";
+        return "";
+    }
+      
+    function startSurvey() {
+      state.name = document.getElementById("nameInput")?.value.trim() || "参与者";
+      state.current = 1;
+      saveProgress();
+      render();
+    }
+
+    function selectAnswer(qIndex, value) {
+      state.answers[qIndex] = Number(value);
+      saveProgress();
+
+      // Auto-advance
+      if (state.current < 92) {
+        state.current++;
+        setTimeout(render, 180); // small delay for visual feedback
+      } else {
+        state.current = 93;
+        render();
+      }
+    }
+
+    function goNext() {
+      if (state.current < 92) {
+        state.current++;
+      } else if (state.current === 92) {
+        state.current = 93;
+      }
+      saveProgress();
+      render();
+    }
+
+    function goBack() {
+      if (state.current > 1) {
+        state.current--;
+        saveProgress();
+        render();
+      }
+    }
+      
+    function confirmReset() {
+      const message = "If reset, all existing answers will be cleared!";
+      if (window.confirm(message)) {
+        // User clicked OK → reset everything
+        localStorage.removeItem(STORAGE_KEY);
+        state = {
+        name: "",
+        current: 0,
+        answers: new Array(92).fill(null)
+      };
+      render();
+      }
+      // If Cancel → do nothing, stay on current page
+    }
+    
+    function toggleDescriptions() {
+      const container = document.getElementById('full-scores-list');
+      const button = document.querySelector('.toggle-descriptions');
+
+      if (!container || !button) return;
+
+      const reportDiv = document.querySelector('.report');
+
+      if (reportDiv.classList.contains('hide-descriptions')) {
+        reportDiv.classList.remove('hide-descriptions');
+        button.textContent = '隐藏描述';
+      } else {
+        reportDiv.classList.add('hide-descriptions');
+        button.textContent = '隐藏描述';
+      }
+    }
+    
+    function toggleScores() {
+      const reportDiv = document.querySelector('.report');
+      const button = document.querySelector('.toggle-scores');
+
+      if (!reportDiv || !button) return;
+
+      if (reportDiv.classList.contains('hide-scores')) {
+        reportDiv.classList.remove('hide-scores');
+        button.textContent = '隐藏分数';
+      } else {
+        reportDiv.classList.add('hide-scores');
+        button.textContent = '隐藏分数';
+      }
+    }
+
+    // ────────────────────────────────────────────────
+    //  INIT
+    // ────────────────────────────────────────────────
+
+    render();
+
+    // Optional: warn before leaving with unsaved progress
+    window.addEventListener("beforeunload", (e) => {
+      if (state.current > 0 && state.current < 93) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    });
+  </script>
+</body>
+</html>
