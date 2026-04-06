@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spiritual Gifts Questionnaire</title>
+  <style>
+    :root {
+      --primary: #0066cc;
+      --primary-dark: #004080;
+      --light: #f8f9fa;
+      --gray: #6c757d;
+      --success: #28a745;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--light);
+      color: #333;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    main {
+      flex: 1;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    h1, h2 {
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
+    }
+
+    .intro p {
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+    }
+
+    label {
+      display: block;
+      margin: 0.6rem 0;
+      font-size: 1.05rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.7rem;
+      font-size: 1.1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      margin: 1.5rem 0;
+    }
+
+    .options label {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.9rem;
+      background: #f0f4f8;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .options input[type="radio"] {
+      width: 1.3rem;
+      height: 1.3rem;
+    }
+
+    .options label:hover {
+      background: #e3f2fd;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.8rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 0.8rem 1.6rem;
+      font-size: 1.05rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    .progress-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid #ddd;
+      padding: 0.8rem 1rem;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.08);
+    }
+
+    progress {
+      width: 100%;
+      height: 10px;
+      border-radius: 5px;
+    }
+
+    progress::-webkit-progress-value {
+      background: var(--success);
+      border-radius: 5px;
+    }
+
+    progress::-moz-progress-bar {
+      background: var(--success);
+      border-radius: 5px;
+    }
+
+    .report {
+      white-space: pre-wrap;
+      font-size: 1.05rem;
+    }
+
+    .report .gift-desc {
+      white-space: normal;
+      margin: 0.4em 0 0.8em 0;
+      padding-left: 2.8em;
+      text-indent: -1.2em;
+      line-height: 1.45;
+    }
+
+    .report .toggle-descriptions,
+    .report .toggle-scores {
+      margin-left: 1.2em;
+      font-size: 0.95rem;
+      padding: 0.4em 0.9em;
+      cursor: pointer;
+      background: #e9ecef;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      color: #495057;
+    }
+
+    .report .toggle-descriptions:hover,
+    .report .toggle-scores:hover {
+      background: #dee2e6;
+    }
+
+    .report.hide-descriptions .gift-desc {
+      display: none;
+    }
+
+    .report.hide-scores .score-value {
+      display: none;
+    }
+
+    /* ────────────────────────────────────────────────
+       Final action buttons – improved centering & shorter height
+    ──────────────────────────────────────────────── */
+
+    .final-actions {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .final-actions > p:first-child {
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 0.6rem;
+      font-size: 1.1rem;
+    }
+
+    .final-actions button,
+    .final-actions a.btn-primary {
+      display: block;
+      width: 100%;
+      padding: 0.55rem 1.2rem !important;
+      font-size: 1.03rem;
+      font-weight: 500;
+      line-height: 1.2;
+      text-align: center;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-sizing: border-box;
+      text-decoration: none;
+      background: var(--primary);
+      color: white;
+      white-space: normal;
+    }
+
+    .final-actions button:hover,
+    .final-actions button:focus,
+    .final-actions a.btn-primary:hover,
+    .final-actions a.btn-primary:focus {
+      background: var(--primary-dark);
+    }
+
+    .final-actions .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .final-actions .btn-secondary:hover,
+    .final-actions .btn-secondary:focus {
+      background: #5a6268;
+    }
+
+    .final-actions p:last-of-type {
+      margin: 0.8rem 0 0 0;
+      font-size: 0.95rem;
+      color: #555;
+      text-align: center;
+    }
+
+    @media (max-width: 400px) {
+      .btn-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.8rem;
+      }
+
+      .btn-container > div {
+        flex: 1 1 auto;
+      }
+
+      .btn-container button {
+        min-width: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>Spiritual Gifts Questionnaire</header>
+
+  <main id="app">
+    <!-- Content dynamically inserted here -->
+  </main>
+
+  <div class="progress-container">
+    <progress id="progress" value="0" max="100"></progress>
+  </div>
+
+  <script>
+    // ────────────────────────────────────────────────
+    //  CONFIGURATION — Replace these parts
+    // ────────────────────────────────────────────────
+
+    const STORAGE_KEY = "survey-progress-2026";
+
+    const questions = [
+        "1. I enjoy handling small details and tasks behind the scenes.",
+        "2. When there is no leader in a group, I often take the initiative to lead.",
+        "3. In a group setting, I naturally reach out to those who are lonely.",
+        "4. I am able to identify needs and carry out the necessary work, no matter how insignificant it may seem.",
+        "5. I can organize ideas, people, and tasks toward a clearly defined goal.",
+        "6. People often say that I have good spiritual discernment.",
+        "7. I strongly believe that I can do great things to glorify the name of God.",
+        "8. I have been invited to sing or play music at church events.",
+        "9. God has answered my prayer by bringing about what seemed impossible.",
+        "10. I can create with my hands, and I am able to design and make things.",
+        "11. Through my prayers, God has granted supernatural results in impossible circumstances.",
+        "12. I am willing to use my finances to meet urgent needs.",
+        "13. I am willing to comfort people in hospitals, prisons, or nursing homes.",
+        "14. I am often able to identify the root of a problem and offer a fitting solution.",
+        "15. I have discerned the challenges a church is facing, and when others had no clear direction, I already had a solution in mind.",
+        "16. I enjoy encouraging and comforting those who are discouraged.",
+        "17. I am able to study a passage of Scripture in depth and share its meaning with others.",
+        "18. I am currently mentoring one or more young Christians in their spiritual growth.",
+        "19. I have gained the respect of others as someone with spiritual authority.",
+        "20. I have the ability to learn foreign languages.",
+        "21. God often reveals to me His will regarding the future direction of the church.",
+        "22. I enjoy being with non-Christians, especially in hopes of sharing the message of the Lord Jesus with them.",
+        "23. Whenever I hear about a particular need through the news or conversation, I feel moved to pray.",
+        "24. I am willing to assist church leaders so that they have more time to focus on priority or more important ministries.",
+        "25. I am not afraid to ask others to carry out an important ministry for the church.",
+        "26. I enjoy hospitality and like making guests feel at home.",
+        "27. I enjoy serving others, no matter how insignificant the task may be.",
+        "28. I have strong organizational ability and often set goals and develop plans to accomplish them.",
+        "29. I am skilled at discerning people's character and identifying spiritual error.",
+        "30. I am often willing to pursue projects that others would not dare to attempt, and I frequently succeed.",
+        "31. I believe I am a good choir member.",
+        "32. God has used me to accomplish things beyond ordinary human ability.",
+        "33. I enjoy practical crafts such as woodworking, weaving, sewing, hardware work, and stained glass.",
+        "34. I enjoy praying for those with physical or emotional illness, asking God to heal them.",
+        "35. I joyfully give far beyond the tithe of my income.",
+        "36. I feel compassion for those who are hurt or lonely, and I am willing to spend time with them to bring them joy.",
+        "37. God has led me, in an important matter, to make the right decision among several complicated choices when no one else knew what to do.",
+        "38. I enjoy studying difficult questions related to God's Word, and I am often able to find answers more quickly and easily than others.",
+        "39. People often come to me with their difficulties, and I encourage them.",
+        "40. When I encounter difficult passages of Scripture, I have a strong desire to search for the answer.",
+        "41. I am willing to sacrifice my free time to help those in need.",
+        "42. I am willing, and even eager, to help plant a new church.",
+        "43. I adapt easily to foreign cultures, languages, and customs. Because of this adaptability, I am willing to serve in another country.",
+        "44. I often speak up for the essentials of the Christian faith, even when my words are unpopular, and some people think I am narrow-minded or stubborn.",
+        "45. I find it easy to lead people to accept Christ.",
+        "46. I believe that the most important thing for a Christian is prayer.",
+        "47. I am willing to take over routine work for others so that they can fulfill their specific tasks.",
+        "48. I am able to organize and lead a group toward the accomplishment of a specific goal.",
+        "49. I enjoy meeting new people and introducing them to others in the group.",
+        "50. I often complete tasks within the time limit, with little need for praise or thanks from others.",
+        "51. I can easily delegate important responsibilities to others.",
+        "52. In complex spiritual matters, while others are still uncertain, I am able to discern what is right and wrong.",
+        "53. Even when outward circumstances are difficult, I trust in God's faithfulness and believe my future is bright.",
+        "54. I enjoy singing, and people say that I have a good voice.",
+        "55. God has, through my prayers, granted supernatural results in impossible circumstances.",
+        "56. I find joy in meeting the needs of others.",
+        "57. Someone has been healed through my prayers.",
+        "58. I do not mind lowering my standard of living so that I can give more to the church and to those in need.",
+        "59. Even if sacrifice is required, I am willing to do all I can to help those around me who are in need.",
+        "60. When people do not know what to do, they usually come to me for advice.",
+        "61. I am able to seek information from many sources in order to find an answer to a problem or to learn more about a topic.",
+        "62. I feel a strong burden to challenge others, not in condemnation, but so that they may grow especially in their spiritual life.",
+        "63. People enjoy listening to my Bible teaching.",
+        "64. I enjoy working with others and hope to help them become the best workers for the Lord that they can be.",
+        "65. People in many different places also recognize my spiritual authority.",
+        "66. I am willing to preach the gospel in another country, in a culture and language different from my own.",
+        "67. I feel compelled to proclaim the message of Scripture so that people may understand what God expects of them.",
+        "68. I enjoy telling others how they can become Christians and inviting them to receive Christ.",
+        "69. God has answered many of my intercessory prayers on behalf of others.",
+        "70. I am glad to help others complete their work, without needing public recognition.",
+        "71. People respect my opinions and follow my direction.",
+        "72. I am willing to open my home to new friends or visitors from the church.",
+        "73. I love helping those in need; when their needs are met, I feel fulfilled.",
+        "74. Even under pressure, I can make important decisions with ease.",
+        "75. People often come to me for guidance in discerning spiritual truth from error.",
+        "76. I often express my faith to God through prayer, and He responds in encouraging ways.",
+        "77. I believe God can use my service in the choir to convey His message through song.",
+        "78. God uses me to perform miracles to glorify His kingdom.",
+        "79. People say that I have a gift for craftsmanship.",
+        "80. People often ask me to pray for the healing of their physical condition.",
+        "81. I often give money anonymously to help others, expecting nothing in return.",
+        "82. When I learn that someone is unable to meet basic needs because of unemployment, I do my best to help.",
+        "83. God enables me to apply biblical truth to practical situations.",
+        "84. I can study profound biblical truths and principles on my own, and I enjoy the process.",
+        "85. People say that I am easy to get along with, and they feel comfortable telling me their secrets.",
+        "86. I can organize my thoughts and clearly present prepared Bible lessons in an orderly way.",
+        "87. I help Christians who have strayed from God restore a right relationship with Him.",
+        "88. It excites me to evangelize in places where there is no church and to help establish a new Christian community.",
+        "89. I do not show racial prejudice, and I sincerely appreciate people who are very different from me.",
+        "90. I find no difficulty applying biblical promises to present-day situations.",
+        "91. I have a strong desire to help non-Christians receive the salvation of the Lord Jesus.",
+        "92. My favorite church ministry is prayer, and I devote a great deal of time to it."
+    ].slice(0, 92); // enforce exactly 92
+    
+    Object.freeze(questions);
+    
+    const spiritualGifts = [
+      {
+        name: "Helps",
+        description: "The gift of helps enables a believer to invest personal abilities in the lives and ministries of other members, so that those being helped may use their spiritual gifts more effectively (Mark 15:40–41; Acts 9:36; Romans 16:1–2; 1 Corinthians 12:28)."
+      },
+      {
+        name: "Leadership",
+        description: "Leadership is the ability to set goals according to God's will and to help others embrace those goals, so that they may willingly and harmoniously pursue them together for the glory of God (Acts 15:7–11; Romans 12:8; 1 Timothy 5:17; Hebrews 13:7–17)."
+      },
+      {
+        name: "Hospitality",
+        description: "Hospitality is the ability to open one's home and warmly welcome those in need of food and lodging (Acts 16:14–15; Romans 12:9–13; 16:23; Hebrews 13:1–2; 1 Peter 4:9)."
+      },
+      {
+        name: "Serving",
+        description: "Serving is the ability to identify unmet needs in God's work, and, within available resources, to meet those needs and help accomplish ministry goals (Acts 6:1–7; Romans 12:7; Galatians 6:2; 2 Timothy 1:16–18; Titus 3:14)."
+      },
+      {
+        name: "Administration",
+        description: "Administration is the ability to clearly understand the short-term and long-term goals of a particular part of Christ's body, and to design and implement effective plans for achieving those goals (Luke 14:28–30; Acts 6:1–7; 1 Corinthians 12:28)."
+      },
+      {
+        name: "Spiritual Discernment",
+        description: "Spiritual discernment is the ability to determine with accuracy whether actions that appear to be from God are truly from God, from human sources, or from Satan. This gift serves to prevent confusion and false teaching from entering the church (Matthew 16:21–23; Acts 5:1–11; 16:16–18; 1 Corinthians 12:10; 1 John 4:1–6)."
+      },
+      {
+        name: "Faith",
+        description: "Faith is the ability to discern God's will and purpose with extraordinary confidence, and to move the community of faith toward the fulfillment of God's promises (Acts 11:22–23; Romans 4:18–21; 1 Corinthians 12:9; Hebrews 11)."
+      },
+      {
+        name: "Music",
+        description: "Music is the ability to worship God and edify others through music, whether by voice or instrument (Deuteronomy 31:22; 1 Samuel 16:16; 1 Chronicles 16:41–42; 2 Chronicles 5:12–13; 34:12; Psalm 150)."
+      },
+      {
+        name: "Miracles",
+        description: "The gift of miracles is the ability to serve as a human instrument through whom God performs mighty works; to observers, these works alter the normal course of nature (Acts 9:36–42; 19:11–20; 20:7–12; Romans 15:18–19; 1 Corinthians 12:10, 28)."
+      },
+      {
+        name: "Craftsmanship",
+        description: "Craftsmanship is the ability to use one's hands, mind, and imagination to advance God's kingdom through artistic creation. Those with this gift may also help others develop their abilities in this area. This gift may also be used in repair, maintenance, care, and beautification for God's kingdom on earth (Exodus 30:22–25; 31:3–11; 2 Chronicles 34:9–13; Acts 18:2–3)."
+      },
+      {
+        name: "Healing",
+        description: "Healing is the ability to serve as a human instrument through whom God heals the physical or emotional illnesses of others (Acts 3:1–10; 5:12–16; 9:32–35; 28:7–10; 1 Corinthians 12:9, 28)."
+      },
+      {
+        name: "Giving",
+        description: "Giving is the ability to contribute material resources to God's work with generosity and joy (Mark 12:41–44; Romans 12:8; 2 Corinthians 8:1–7; 9:2–8)."
+      },
+      {
+        name: "Mercy",
+        description: "Mercy is the ability to empathize with and show compassion toward those who suffer physically, mentally, or emotionally, and to translate that compassion into acts that bring joy, express Christ's love, and lessen their pain (Matthew 9:34, 36; Mark 9:41; 1 Thessalonians 5:14)."
+      },
+      {
+        name: "Wisdom",
+        description: "Wisdom is the ability to apply spiritual truth appropriately to life and to make the right decisions in difficult circumstances (Acts 6:3, 10; 1 Corinthians 2:1–13; 12:8; James 1:5; 2 Peter 3:15)."
+      },
+      {
+        name: "Knowledge",
+        description: "Knowledge is the ability to discover, gather, analyze, and clarify information and ideas related to the growth and well-being of the church (Acts 5:1–11; 1 Corinthians 12:8; 2 Corinthians 11:8; Colossians 2:2–3)."
+      },
+      {
+        name: "Exhortation",
+        description: "Exhortation is the ability to use God's Word to encourage, comfort, refresh, motivate, and help others fulfill their tasks and grow spiritually (Acts 4:32–37; 14:22; Romans 12:8; 1 Timothy 4:13; Hebrews 10:24–25)."
+      },
+      {
+        name: "Teaching",
+        description: "Teaching is the ability to study Scripture logically and systematically, and to explain the truth clearly so that believers are edified and equipped (Acts 18:24–28; 20:20–21; 1 Corinthians 12:28; Ephesians 4:11–14)."
+      },
+      {
+        name: "Shepherding",
+        description: "Shepherding is the ability to assume long-term personal responsibility for the spiritual well-being of believers (John 10:1–18; Ephesians 4:11–14; 1 Timothy 3:1–7; 1 Peter 5:1–3)."
+      },
+      {
+        name: "Apostleship",
+        description: "Apostleship is the ability to lead a number of churches and to exercise a special measure of spiritual authority in ministry, while being naturally received and respected by those churches (Acts 15:1–2; 1 Corinthians 12:18; 2 Corinthians 12:12; Galatians 1:7–10; Ephesians 3:1–9; 4:11–14)."
+      },
+      {
+        name: "Missions",
+        description: "Missions is the ability to serve in a foreign culture by using one's spiritual gifts in that setting (Acts 8:4; 13:1–3; 22:21; Romans 10:15; 1 Corinthians 9:19–23)."
+      },
+      {
+        name: "Prophecy",
+        description: "Prophecy is the ability to be anointed by God to proclaim His message in such a way that hearers are convinced it is the Word of God and feel compelled to respond (Acts 2:37–40; 7:54; 26:24–29; 1 Corinthians 14:1, 3; 1 Thessalonians 1:5)."
+      },
+      {
+        name: "Evangelism",
+        description: "Evangelism is the ability to share the gospel appropriately with non-believers, lead them to become disciples of Jesus, and help them become responsible members of the church (Acts 5:5–6, 26–40; 14:21; 21:8; Ephesians 4:11–14; 2 Timothy 4:5)."
+      },
+      {
+        name: "Prayer",
+        description: "Prayer is the ability, more than the average believer, to pray more frequently and for longer periods of time, and to experience more frequent and fitting answers to prayer (Luke 22:41–44; Acts 12:12; Colossians 1:9–12; 4:12–13; 1 Timothy 2:1–2; James 5:14–16)."
+      }
+    ];
+
+    // Optional – prevent accidental modification
+    Object.freeze(spiritualGifts);
+
+    // This function receives an array of 92 numbers (0–4 or null/undefined if unanswered)
+    // You MUST replace this function with your real scoring logic
+    function generateReport2(answers) {
+       // Real Report here
+      const topThreeResult = topThree(calculateReport(answers));
+      report = "";
+      for (let i = 0; i<topThreeResult.length; i++) {
+        report += "index:" + topThreeResult[i].index + ",";
+        report += "score:" + topThreeResult[i].score + ";";
+      }
+      return report;    
+    }
+    
+    function generatePlainTextReport(answers) {
+      const result = calculateReport(answers);
+      const top = topThree(result);
+
+      let text = `Spiritual Gifts Report for ${state.name || "Participant"}\n`;
+      text += "==============================\n\n";
+      text += "Your Primary Spiritual Gifts (sorted by score, including ties with third place):\n\n";
+
+      top.forEach((item, rank) => {
+        const position = rank === 0 ? "First" :
+                         rank === 1 ? "Second" :
+                         rank === 2 ? "Third" : `${rank + 1} (tied)`;
+        const name = spiritualGifts[item.index].name;
+        const desc = spiritualGifts[item.index].description;
+        text += `${position}: ${name} (Score: ${item.score} / 16)\n`;
+        text += `${desc}\n\n`;
+      });
+
+      text += "==============================\n";
+      text += "Complete Scores for All Categories:\n\n";
+
+      result.forEach((score, i) => {
+        text += `Category ${i + 1} (${spiritualGifts[i].name}): ${score} / 16\n`;
+        text += `${spiritualGifts[i].description}\n\n`;
+      });
+
+      text += "(The highest possible score for each category is 16)\n";
+      return text;
+    }
+
+    function generateReport(answers) {
+      const result = calculateReport(answers);
+      const top = topThree(result);
+
+      let report = "\n";
+      report += "Your Primary Spiritual Gifts (sorted by score, including ties with third place):\n\n";
+
+      top.forEach((item, rank) => {
+        const position = rank === 0 ? "First" :
+                         rank === 1 ? "Second" :
+                         rank === 2 ? "Third" : `${rank + 1} (tied)`;
+
+        const name = spiritualGifts[item.index].name;
+        const desc = spiritualGifts[item.index].description;
+
+        report += `<b>${position}: ${name}</b> `;
+        report += `<span class="score-value">(Score: ${item.score} / 16)</span><br>`;
+        report += `<div class="gift-desc">${desc}</div>`;
+      });
+
+      report += `<BR><button class="toggle-descriptions" onclick="toggleDescriptions()">Hide Descriptions</button><br><br>`;
+      report += `<button class="toggle-scores" onclick="toggleScores()">Hide Scores</button><br><br>`;
+
+      report += "<H2>Complete Scores for All Categories:</H2>"; 
+      report += `<div id="full-scores-list">`;
+      result.forEach((score, i) => {
+        report += `<b>Category ${i + 1} (${spiritualGifts[i].name}):</b> `;
+        report += `<span class="score-value">${score}</span><br>`;
+        report += `<div class="gift-desc">${spiritualGifts[i].description}</div>`;
+      });
+
+      report += `<p style="font-size:0.95rem; color:#555;">(The highest possible score for each category is 16)</p><br>`;
+
+      return report;
+    }
+    
+    /**
+     * Returns all items that belong to the top 3 scores or better,
+     * including any additional items that tie with the third-highest score.
+     * Results are ordered from highest to lowest score.
+     * Within the same score, lower indices come first.
+     *
+     * @param {number[]} result - Array of scores (length = number of gift categories)
+     * @returns {{index: number, score: number}[]} - Array of top gifts
+     */
+    function topThree(result) {
+      // Create array of {score, index} pairs
+      const indexed = result.map((score, index) => ({ score, index }));
+
+      // Sort: descending by score, then ascending by index on ties
+      indexed.sort((a, b) => {
+        if (b.score !== a.score) {
+          return b.score - a.score;     // higher score first
+        }
+        return a.index - b.index;       // stable: smaller index first
+      });
+
+      // If fewer than 3 items exist (very rare), return all
+      if (indexed.length < 3) {
+        return indexed.map(item => ({ index: item.index, score: item.score }));
+      }
+
+      // Find the score of the third position
+      const thirdScore = indexed[2].score;
+
+      // Include all items whose score >= thirdScore
+      const topItems = indexed.filter(item => item.score >= thirdScore);
+
+      // Return only the relevant properties
+      return topItems.map(item => ({
+        index: item.index,
+        score: item.score
+      }));
+    }
+    
+    function calculateReport(answers) {
+      const result = new Array(23).fill(0);
+
+      for (let i = 0; i < 23; i++) {
+        // Question positions (1-based): base, base+23, base+46, base+69
+        // Convert to 0-based array indices
+        const q1 = i;           // 0 .. 22
+        const q2 = i + 23;      // 23 .. 45
+        const q3 = i + 46;      // 46 .. 68
+        const q4 = i + 69;      // 69 .. 91
+
+        // Safely get values (missing or invalid → treat as 0)
+        const v1 = Number(answers[q1]) || 0;
+        const v2 = Number(answers[q2]) || 0;
+        const v3 = Number(answers[q3]) || 0;
+        const v4 = Number(answers[q4]) || 0;
+
+        // Sum and store (result[0] = group 1, result[1] = group 2, ..., result[22] = group 23)
+        result[i] = v1 + v2 + v3 + v4;
+    }
+
+      return result;
+    }
+
+    // ────────────────────────────────────────────────
+    //  STATE & CORE LOGIC (do NOT modify unless necessary)
+    // ────────────────────────────────────────────────
+
+    let state = {
+      name: "",
+      current: 0,           // 0 = welcome, 1–92 = questions, 93 = report
+      answers: new Array(92).fill(null),
+      ...loadProgress()
+    };
+
+    function loadProgress() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return {};
+        const data = JSON.parse(saved);
+        // Basic validation
+        if (typeof data.current === "number" && Array.isArray(data.answers)) {
+          return {
+            name: data.name || "",
+            current: Math.max(0, Math.min(93, data.current)),
+            answers: data.answers.map(v => (Number.isInteger(v) && v >= 0 && v <= 4) ? v : null)
+          };
+        }
+      } catch (e) {}
+      return {};
+    }
+
+    function saveProgress() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          name: state.name,
+          current: state.current,
+          answers: state.answers
+        }));
+      } catch (e) {
+        console.warn("localStorage save failed", e);
+      }
+    }
+
+    function updateProgressBar() {
+      const answered = state.answers.filter(v => v !== null).length;
+      const pct = state.current >= 93 ? 100 : (answered / 92) * 100;
+      document.getElementById("progress").value = pct;
+    }
+
+    function render() {
+      const app = document.getElementById("app");
+      let html = "";
+
+      if (state.current === 0) {
+        // Welcome screen
+        html = `
+          <div class="card intro">
+            <h1>Welcome</h1>
+            <p>Please respond to each statement according to your actual life experience by selecting any number from 0 to 4, and write that number in front of each question. You do not need to think too deeply; simply answer according to your natural response.</p>
+            <p>To begin, please enter your first name (optional):</p>
+            <input type="text" id="nameInput" placeholder="Your first name" value="${state.name}" />
+            <div class="btn-container">
+              <button class="btn-primary" onclick="startSurvey()">Start Survey</button>
+            </div>
+          </div>
+        `;
+      } else if (state.current >= 1 && state.current <= 92) {
+        // Question screen
+        const qIndex = state.current - 1;
+        const qText = questions[qIndex] || `Question ${state.current}`;
+        const selected = state.answers[qIndex];
+
+        html = `
+          <div class="card">
+            <h2>${state.name || "User"}, question ${state.current} of 92</h2>
+            <p style="font-size:1.1rem; margin-bottom:1.5rem;">${qText}</p>
+
+            <div class="options">
+              ${[0,1,2,3,4].map(val => `
+                <label>
+                  <input type="radio" name="q${qIndex}" value="${val}"
+                    ${selected === val ? "checked" : ""}
+                    onchange="selectAnswer(${qIndex}, ${val})" />
+                  <!--${val} — ${val === 0 ? "Strongly Disagree" : val === 4 ? "Strongly Agree" : ""}-->
+                  ${answerSelections(val)}
+                </label>
+              `).join("")}
+            </div>
+
+            <div class="btn-container" style="display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+              <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                  ${state.current > 1 ? `
+                    <button class="btn-secondary" onclick="goBack()">Back</button>
+                    ` : ""}
+                  <button class="btn-primary" onclick="goNext()" ${selected === null ? "disabled" : ""}>
+                    Next
+                  </button>
+                  </div>
+
+                  <button class="btn-secondary" onclick="confirmReset()">
+                    Reset
+                  </button>
+                </div>
+          </div>
+        `;
+      } else if (state.current === 93) {
+        // Report screen
+        const reportText = generateReport(state.answers);
+
+        html = `
+          <div class="card">
+            <h1>Your report, ${state.name}</h1>
+            <div class="report" style="font-size:1.05rem; white-space:pre-wrap;">
+              ${reportText}
+            </div>
+
+            <div class="final-actions">
+              <p>Next Step:</p>
+
+              <button class="btn-primary" onclick="window.print()">Print / Save as PDF</button>
+
+              <a href="mailto:?subject=Spiritual Gifts Report for ${state.name}&body=${encodeURIComponent(generatePlainTextReport(state.answers))}"
+                 class="btn-primary">Email Results (includes all information)</a>
+
+              <p>Tip: Take a screenshot for your records.</p>
+
+              <button class="btn-secondary" onclick="confirmReset()">Reset</button>
+            </div>
+          </div>
+        `;
+      }
+
+      app.innerHTML = html;
+      updateProgressBar();
+    }
+
+    // ────────────────────────────────────────────────
+    //  EVENT HANDLERS
+    // ────────────────────────────────────────────────
+
+    function answerSelections(value) {
+        if (value == 0)
+            return "Strongly disagree";
+        if (value == 1)
+            return "Slightly agree";
+        if (value == 2)
+            return "Moderately agree";
+        if (value == 3)
+            return "Fairly agree";
+        if (value == 4)
+            return "Strongly agree";
+        return "";
+    }
+      
+    function startSurvey() {
+      state.name = document.getElementById("nameInput")?.value.trim() || "Participant";
+      state.current = 1;
+      saveProgress();
+      render();
+    }
+
+    function selectAnswer(qIndex, value) {
+      state.answers[qIndex] = Number(value);
+      saveProgress();
+
+      // Auto-advance
+      if (state.current < 92) {
+        state.current++;
+        setTimeout(render, 180); // small delay for visual feedback
+      } else {
+        state.current = 93;
+        render();
+      }
+    }
+
+    function goNext() {
+      if (state.current < 92) {
+        state.current++;
+      } else if (state.current === 92) {
+        state.current = 93;
+      }
+      saveProgress();
+      render();
+    }
+
+    function goBack() {
+      if (state.current > 1) {
+        state.current--;
+        saveProgress();
+        render();
+      }
+    }
+      
+    function confirmReset() {
+      const message = "If reset, all existing answers will be cleared!";
+      if (window.confirm(message)) {
+        // User clicked OK → reset everything
+        localStorage.removeItem(STORAGE_KEY);
+        state = {
+        name: "",
+        current: 0,
+        answers: new Array(92).fill(null)
+      };
+      render();
+      }
+      // If Cancel → do nothing, stay on current page
+    }
+    
+    function toggleDescriptions() {
+      const container = document.getElementById('full-scores-list');
+      const button = document.querySelector('.toggle-descriptions');
+
+      if (!container || !button) return;
+
+      const reportDiv = document.querySelector('.report');
+
+      if (reportDiv.classList.contains('hide-descriptions')) {
+        reportDiv.classList.remove('hide-descriptions');
+        button.textContent = 'Hide Descriptions';
+      } else {
+        reportDiv.classList.add('hide-descriptions');
+        button.textContent = 'Show Descriptions';
+      }
+    }
+    
+    function toggleScores() {
+      const reportDiv = document.querySelector('.report');
+      const button = document.querySelector('.toggle-scores');
+
+      if (!reportDiv || !button) return;
+
+      if (reportDiv.classList.contains('hide-scores')) {
+        reportDiv.classList.remove('hide-scores');
+        button.textContent = 'Hide Scores';
+      } else {
+        reportDiv.classList.add('hide-scores');
+        button.textContent = 'Show Scores';
+      }
+    }
+
+    // ────────────────────────────────────────────────
+    //  INIT
+    // ────────────────────────────────────────────────
+
+    render();
+
+    // Optional: warn before leaving with unsaved progress
+    window.addEventListener("beforeunload", (e) => {
+      if (state.current > 0 && state.current < 93) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    });
+  </script>
+</body>
+</html>
