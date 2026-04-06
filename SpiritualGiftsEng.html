@@ -531,7 +531,7 @@
       });
 
       text += "==============================\n";
-      text += "Complete Scores for All Categories:\n\n";
+      text += "Scores in All Categories:\n\n";
 
       result.forEach((score, i) => {
         text += `Category ${i + 1} (${spiritualGifts[i].name}): ${score} / 16\n`;
@@ -696,7 +696,7 @@
         html = `
           <div class="card intro">
             <h1>Welcome</h1>
-            <p>Please respond to each statement according to your actual life experience by selecting any number from 0 to 4, and write that number in front of each question. You do not need to think too deeply; simply answer according to your natural response.</p>
+            <p>Please respond to each statement according to your actual life experience. You do not need to think too deeply; simply answer according to your natural response.</p>
             <p>To begin, please enter your first name (optional):</p>
             <input type="text" id="nameInput" placeholder="Your first name" value="${state.name}" />
             <div class="btn-container">
